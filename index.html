@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calculator</title>
+</head>
+<body>
+	<style type="text/css">
+		
+		.main {
+		    width: 20%;
+		    margin: 100px auto 0;
+		    text-align: center;
+		    background-color: #eeefef;
+		    box-shadow: 0 0 30px grey;
+		    padding: 5px;
+		}
+		.calc_row {
+		    margin: 4px 0;
+		    display: flex;
+		    justify-content: space-between;
+		}
+
+		.calc_display {
+		    margin: 0 0 5px;
+		    width: 100%;
+		    border: none;
+		    padding: 4px 2px;
+		    text-align: right;
+		    font: 30px Arial, sans-serif;
+		    color: #000;
+		    height: 50px;
+		    text-align: right; 
+		    background: #eeefef;
+		    resize: none;
+		}
+
+		.calc_btn {
+		    width: 24%;
+		    height: 60px;
+		    cursor: pointer;
+		    border: none;
+		    background: #fcfcfd;
+		}
+		.calc_btn:hover {
+		    background: #eeefef;
+		    font-weight: 700;
+		}
+		.calc_head{
+			 height: 50px;
+			justify-content: space-between;
+		}
+		.calc_head img{
+			width: 15px;
+			height: 15px;
+			cursor: pointer;
+			margin: 5px
+		}
+		.calc_equal{
+			background: #91c1e8;
+		}
+		.calc_op{
+			background: #f7f7f8;
+		}
+		
+	</style>
+
+
+	
+		
+	<div class="main">	
+		<div class="calc_row calc_head">
+				<img src="img/open_wind.svg">
+				<img src="img/close.svg">
+		</div>
+		<div class="calc_row">
+				<!-- <input class="calc_display" id="display" type="text" value="0" disabled /> -->
+				<textarea class="calc_display" id="display" type="text" disabled>0</textarea>
+		</div>
+		<div class="calc_row">
+				<button type="button" value="%" class="calc_btn calc_percent calc_op">&#37;</button>
+				<button type="button" value="CE" class="calc_btn calc_clear calc_op">CE</button>
+				<button type="button" value="C" class="calc_btn calc_power calc_op">C</button>
+				<button type="button" value="backspace" class="calc_btn calc_backspace calc_op"><img src="img/clear.svg"></button>
+		</div>
+		<div class="calc_row">
+				<button type="button" value="1/x" class="calc_btn calc_op">&sup1;/x</button>
+				<button type="button" value="sqr" class="calc_btn calc_op">x&sup2;</button>
+				<button type="button" value="sqrt" class="calc_btn calc_op">&sup2;&radic;x</button>
+				<button type="button" value="/" class="calc_btn calc_op">&divide;</button>
+		</div>
+		<div class="calc_row">
+				<button type="button" value="7" class="calc_btn num">7</button>
+				<button type="button" value="8" class="calc_btn num">8</button>
+				<button type="button" value="9" class="calc_btn num">9</button>
+				<button type="button" value="*" class="calc_btn calc_op">&times;</button>
+		</div>
+		<div class="calc_row">
+				<button type="button" value="4" class="calc_btn num">4</button>
+				<button type="button" value="5" class="calc_btn num">5</button>
+				<button type="button" value="6" class="calc_btn num">6</button>
+				<button type="button" value="-" class="calc_btn calc_op">&minus;</button>
+		</div>
+		<div class="calc_row">
+				<button type="button" value="1" class="calc_btn num">1</button>
+				<button type="button" value="2" class="calc_btn num">2</button>
+				<button type="button" value="3" class="calc_btn num">3</button>
+				<button type="button" value="+" class="calc_btn calc_op">&plus;</button>
+		</div>
+		<div class="calc_row">
+				<button type="button" value="-" class="calc_btn">+/-</button>
+				<button type="button" value="0" class="calc_btn num">0</button>
+				<button type="button" value="." class="calc_btn">.</button>
+				<button type="button" value="=" class="calc_btn calc_equal">&#61;</button>
+		</div>	
+	</div>
+
+
+
+	<script type="text/javascript">
+
+		let display = document.getElementById('display');
+
+		let ls = localStorage.getItem('calc');
+		console.log(ls);
+		if(ls && ls != 0){
+			display.value = ls;
+		}
+		document.querySelectorAll('button').forEach(button => {
+		    button.addEventListener('click', function () {
+				
+
+		        //console.log(this.value);
+		        if(display.value == '0' && this.value != '.'){
+		        	display.value = '';
+		        }
+		        if(this.value >= 0 && this.value < 10  || this.value == '+' || this.value == '-' || this.value == '/' || this.value == '*' || this.value == '.'){
+		        	display.value = display.value + this.value;		        	
+		        }
+
+				if(display.value.slice(-2) == '/0'){
+					alert('На ноль делить нельзя!');
+					display.value = display.value.substring(0, display.value.length - 1);
+		        }
+
+		        if(this.value == 'C'){
+		        	display.value = '0';
+		        }
+
+		        if(this.value == '=' && display.value != 0){
+		        	display.value = eval(display.value);      	
+		        } 
+
+		        if(this.value == 'backspace'){
+		        	if(display.value.length == 1){
+						display.value = 0;
+		        	} else {
+		        		display.value = display.value.substring(0, display.value.length - 1);  
+		        	}
+		        	
+		        }
+		        if(this.value == '%'){
+		        	display.value = display.value/100;  
+		        }
+
+				if(this.value == 'sqr'){
+		        	display.value = Math.pow(display.value, 2);  
+		        }
+
+		        if(this.value == 'sqrt'){
+		        	display.value = Math.sqrt(display.value);  
+		        }
+
+				if(this.value == '1/x' && display.value != 0){
+		        	display.value = 1/display.value;  
+		        } 
+
+		        display.scrollTop = display.scrollHeight;
+
+		        localStorage.setItem('calc', display.value)
+		    });
+		});
+
+		
+	</script>
+</body>
+</html>
